@@ -1,0 +1,50 @@
+{
+  "kind": "branchlingo-manifest",
+  "schemaVersion": 1,
+  "profile": "formatjs-mf1-finite-v1",
+  "catalogs": [
+    {
+      "id": "en",
+      "locale": "en",
+      "path": "files.json",
+      "sha256": "f68e801d2013dc82622bece5dd916d354ed82df369ae1438e8797969841640f9"
+    },
+    {
+      "id": "fr",
+      "locale": "fr",
+      "path": "files.json",
+      "sha256": "f68e801d2013dc82622bece5dd916d354ed82df369ae1438e8797969841640f9"
+    },
+    {
+      "id": "ja",
+      "locale": "ja",
+      "path": "files.json",
+      "sha256": "f68e801d2013dc82622bece5dd916d354ed82df369ae1438e8797969841640f9"
+    }
+  ],
+  "contracts": [
+    {
+      "messageId": "files",
+      "variables": [
+        {
+          "name": "mode",
+          "domain": {
+            "kind": "string-enum",
+            "values": [
+              "all",
+              "summary"
+            ]
+          }
+        },
+        {
+          "name": "n",
+          "domain": {
+            "kind": "integer-range",
+            "min": 0,
+            "max": 3
+          }
+        }
+      ]
+    }
+  ]
+}

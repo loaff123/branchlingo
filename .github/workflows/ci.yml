@@ -1,0 +1,32 @@
+name: Verify exact profile
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.19.0'
+          cache: npm
+      - name: Verify exact runtime
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          const expected = {node: '24.19.0', v8: '13.6.233.17-node.51', icu: '78.3', cldr: '48.0', unicode: '17.0'};
+          assert.equal(process.platform, 'linux');
+          assert.equal(process.arch, 'x64');
+          for (const [key, value] of Object.entries(expected)) assert.equal(process.versions[key], value, key);
+          console.log(JSON.stringify({platform: process.platform, arch: process.arch, ...expected}));
+          JS
+      - run: npm ci --ignore-scripts
+      - name: Verify dependency versions and installed identity
+        run: |
+          npm ls --all
+          node --input-type=module -e "import { runtimeIdentity } from './src/runtime.mjs'; console.log(JSON.stringify(runtimeIdentity()));"
+      - run: npm run check

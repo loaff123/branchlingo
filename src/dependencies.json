@@ -1,0 +1,34 @@
+[
+  {
+    "name": "@formatjs/fast-memoize",
+    "version": "3.1.7",
+    "integrity": "sha512-zXfhLpvA6T7+efdt9JLbBwZ00tT7NsBMDVnDu8rpHeNNv8KfRZAMo2gkG0k9lK/Nzc//3kJ9pImsfuJxk3KhUA==",
+    "entrySha256": "bc7aa788e52c49b3038e91d26c42121dca9635bdb4ed861701cdf01ab1f4c486",
+    "licenseSha256": "b1cc980e28e9e48f377db191578a9361494ca7117185b69dd66cabaf5b460fb7",
+    "packageJsonSha256": "3932b7f0608a5744ac241e047af721afee5321d7d63f6be0ec826c7ff6a40388"
+  },
+  {
+    "name": "@formatjs/icu-messageformat-parser",
+    "version": "3.5.20",
+    "integrity": "sha512-DUzCb2iskGDKvLU7P+nz/rjpmN59luoTRbWHFFNYNnZTxWCKvwPI94rNll99TGZaI6XoTbDF0QGegk21GFrQZQ==",
+    "entrySha256": "80cd2ff7b11857412dbbd3721575685d72bdc2de116f039c3a62d317a9fb8057",
+    "licenseSha256": "b1cc980e28e9e48f377db191578a9361494ca7117185b69dd66cabaf5b460fb7",
+    "packageJsonSha256": "2fe71f57ba93059420cb877a9cc5a1969ba3e6d173f796dc077bf1f7a9e03f63"
+  },
+  {
+    "name": "@formatjs/icu-skeleton-parser",
+    "version": "2.1.12",
+    "integrity": "sha512-ca7tZMLpfHX3sUD7hP6gE/qr6Iq89EDd3ZLeRhbsB7r0UD55DGJq+tmFLzrGrnx5StahUevQmQQVtbDRHsfDHA==",
+    "entrySha256": "fc9d2c350311bc1ebad5803fa98bcd0e08d0897d9cf0008ca55c061e1984cffb",
+    "licenseSha256": "b1cc980e28e9e48f377db191578a9361494ca7117185b69dd66cabaf5b460fb7",
+    "packageJsonSha256": "3262de3e96398c7caa8e7435d160406cbe89f8dca070a322b18c9447dc932e75"
+  },
+  {
+    "name": "intl-messageformat",
+    "version": "12.1.2",
+    "integrity": "sha512-Y7ZnMtT/04nVJnjf1/x/AkfP5we/iN0AhckDdlFPtnetk6/VTuj2OPW5SE7steMd3UNaOtky4KJJY6jwyvWfJg==",
+    "entrySha256": "3ceb9d7ec736c5d3e4efb05b76878f633b80d3315d1ce75cdf15984d1269e78d",
+    "licenseSha256": "cc4143615b27c66eafbe913f132a9e41ac14c1e2ec6b2df24dafeaa97f028850",
+    "packageJsonSha256": "7838af3f7ed5effbea45fdded0c6883ac67cc7b993dde715d4610f97269e00d1"
+  }
+]

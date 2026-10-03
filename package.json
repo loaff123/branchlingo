@@ -1,0 +1,39 @@
+{
+  "name": "branchlingo",
+  "version": "0.1.0",
+  "description": "Offline finite-domain ICU MessageFormat arm exercise packs with verified witnesses",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": "24.19.0"
+  },
+  "bin": {
+    "branchlingo": "bin/branchlingo.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./src/index.mjs"
+    }
+  },
+  "files": [
+    "src",
+    "bin",
+    "index.d.ts",
+    "schemas",
+    "examples",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "runtime-lock.json"
+  ],
+  "scripts": {
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs",
+    "check": "npm test && node tests/resource-boundaries.mjs && node tests/worker-containment.mjs && python3 tests/offline_check.py && node tests/package-check.mjs"
+  },
+  "dependencies": {
+    "@formatjs/icu-messageformat-parser": "3.5.20",
+    "intl-messageformat": "12.1.2"
+  }
+}

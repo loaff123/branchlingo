@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {parse} from '@formatjs/icu-messageformat-parser';
+import {preflightMF1,PARSER_OPTIONS} from '../src/preflight.mjs';
+const fixtures=JSON.parse(fs.readFileSync(new URL('./fixtures/representative.json',import.meta.url))).fixtures;
+test('lexical guard accepts original fixtures and parser-sensitive quotes',()=>{for(const f of fixtures){assert.doesNotThrow(()=>preflightMF1(f.text),f.id);assert.doesNotThrow(()=>parse(f.text,PARSER_OPTIONS));}for(const s of ["'{'", "don't {x}","'{unterminated", "a}","{n,plural,other{'#' #}}","{s,select,a{'#' {x}}other{}}","'<b>'",'a < 3'])assert.doesNotThrow(()=>preflightMF1(s),s);});
+test('depth is structural, not quoted braces; parser bombs rejected early',()=>{const nested=n=>'{n,plural,other{'.repeat(n)+'x'+'}}'.repeat(n);assert.doesNotThrow(()=>preflightMF1(nested(32)));assert.throws(()=>preflightMF1(nested(33)),e=>e.status==='incomplete');assert.doesNotThrow(()=>preflightMF1("'"+'{'.repeat(5000)+"'"));});
+test('unsupported styles/tags and malformed options rejected before parser',()=>{for(const s of ['{n,number}','{d,date,short}','<b>x</b>','{x,wat,other{x}}','{n,plural,one{x}}','{n,plural,=01{x}other{y}}','{n,plural,=+1{x}other{y}}','{n,plural,=-0{x}other{y}}'])assert.throws(()=>preflightMF1(s),s);});

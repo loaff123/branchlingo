@@ -1,0 +1,10 @@
+{
+  "kind": "branchlingo-catalog",
+  "schemaVersion": 1,
+  "messages": [
+    {
+      "id": "files",
+      "text": "{mode, select, summary {{n, plural, =1 {Exactly one} one {Category one} other {# files}}} other {{mode, select, summary {Unreachable} other {All files}}}}"
+    }
+  ]
+}

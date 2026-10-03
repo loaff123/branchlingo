@@ -1,0 +1,1004 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://branchlingo.invalid/schemas/v1/bundle.json",
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "value": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 4096
+        },
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      ]
+    },
+    "domain": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "string-enum"
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 4096
+              },
+              "minItems": 1,
+              "maxItems": 256
+            }
+          },
+          "required": [
+            "kind",
+            "values"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "integer-range"
+            },
+            "min": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "kind",
+            "min",
+            "max"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "sample"
+            },
+            "value": {
+              "$ref": "#/$defs/value"
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ]
+        }
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "domain": {
+          "$ref": "#/$defs/domain"
+        }
+      },
+      "required": [
+        "name",
+        "domain"
+      ]
+    },
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "messageId": {
+          "$ref": "#/$defs/id"
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/binding"
+          },
+          "minItems": 0,
+          "maxItems": 128
+        }
+      },
+      "required": [
+        "messageId",
+        "variables"
+      ]
+    },
+    "catalogRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "locale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "id",
+        "locale",
+        "path",
+        "sha256"
+      ]
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dispatchEvaluations": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000000
+        },
+        "maskWordOps": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000000
+        },
+        "astNodes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50000
+        },
+        "arms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "witnessCases": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "renderWork": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000000
+        },
+        "packBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16777216
+        }
+      },
+      "required": [
+        "dispatchEvaluations",
+        "maskWordOps",
+        "astNodes",
+        "arms",
+        "witnessCases",
+        "renderWork",
+        "packBytes"
+      ]
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "branchlingo-manifest"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "profile": {
+          "const": "formatjs-mf1-finite-v1"
+        },
+        "catalogs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/catalogRef"
+          },
+          "minItems": 1,
+          "maxItems": 16
+        },
+        "contracts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contract"
+          },
+          "minItems": 1,
+          "maxItems": 1000
+        },
+        "limits": {
+          "$ref": "#/$defs/limits"
+        }
+      },
+      "required": [
+        "kind",
+        "schemaVersion",
+        "profile",
+        "catalogs",
+        "contracts"
+      ]
+    },
+    "message": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 65536
+        }
+      },
+      "required": [
+        "id",
+        "text"
+      ]
+    },
+    "catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "branchlingo-catalog"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/message"
+          },
+          "minItems": 1,
+          "maxItems": 1000
+        }
+      },
+      "required": [
+        "kind",
+        "schemaVersion",
+        "messages"
+      ]
+    },
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "offsetUtf16": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65536
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65537
+        },
+        "columnCodePoints": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65537
+        }
+      },
+      "required": [
+        "offsetUtf16",
+        "line",
+        "columnCodePoints"
+      ]
+    },
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/position"
+        },
+        "end": {
+          "$ref": "#/$defs/position"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ]
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "integrity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "entrySha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "integrity",
+        "entrySha256"
+      ]
+    },
+    "localeRuntime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requested": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "canonical": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "formatterResolved": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "pluralCardinalResolved": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "pluralOrdinalResolved": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "numberResolved": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "behaviorSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "requested",
+        "canonical",
+        "formatterResolved",
+        "pluralCardinalResolved",
+        "pluralOrdinalResolved",
+        "numberResolved",
+        "behaviorSha256"
+      ]
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "profile": {
+          "const": "formatjs-mf1-finite-v1"
+        },
+        "toolVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "toolBuildSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "node": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "v8": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "icu": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "cldr": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "unicode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "arch": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "lockSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "packages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/package"
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "locales": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/localeRuntime"
+          },
+          "minItems": 1,
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "profile",
+        "toolVersion",
+        "toolBuildSha256",
+        "node",
+        "v8",
+        "icu",
+        "cldr",
+        "unicode",
+        "platform",
+        "arch",
+        "lockSha256",
+        "packages",
+        "locales"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "catalogId": {
+          "$ref": "#/$defs/id"
+        },
+        "locale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "byteLength": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2097152
+        }
+      },
+      "required": [
+        "catalogId",
+        "locale",
+        "sha256",
+        "byteLength"
+      ]
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "messages": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "arms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "reachable": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "unreachable": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "cases": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "dispatchEvaluations": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000000
+        },
+        "maskWordOps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000000
+        },
+        "renderWork": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000000
+        }
+      },
+      "required": [
+        "messages",
+        "arms",
+        "reachable",
+        "unreachable",
+        "cases",
+        "dispatchEvaluations",
+        "maskWordOps",
+        "renderWork"
+      ]
+    },
+    "argument": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/sha256"
+        },
+        "catalogId": {
+          "$ref": "#/$defs/id"
+        },
+        "messageId": {
+          "$ref": "#/$defs/id"
+        },
+        "locale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "arguments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/argument"
+          },
+          "minItems": 0,
+          "maxItems": 128
+        },
+        "output": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 1048576
+        },
+        "outputSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "trace": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sha256"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "id",
+        "catalogId",
+        "messageId",
+        "locale",
+        "arguments",
+        "output",
+        "outputSha256",
+        "trace"
+      ]
+    },
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ancestorArmId": {
+          "$ref": "#/$defs/sha256"
+        },
+        "variable": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "allowedCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10001
+        },
+        "maskSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "ancestorArmId",
+        "variable",
+        "allowedCount",
+        "maskSha256"
+      ]
+    },
+    "arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/sha256"
+        },
+        "catalogId": {
+          "$ref": "#/$defs/id"
+        },
+        "messageId": {
+          "$ref": "#/$defs/id"
+        },
+        "locale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "variable": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "selectorType": {
+          "enum": [
+            "select",
+            "plural",
+            "selectordinal"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "selectorSpan": {
+          "$ref": "#/$defs/span"
+        },
+        "bodySpan": {
+          "$ref": "#/$defs/span"
+        },
+        "localAllowedCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10001
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/constraint"
+          },
+          "minItems": 1,
+          "maxItems": 32
+        },
+        "classification": {
+          "enum": [
+            "reachable",
+            "unreachable"
+          ]
+        },
+        "witnessCaseId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "emptyVariables": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 0,
+          "maxItems": 128
+        }
+      },
+      "required": [
+        "id",
+        "catalogId",
+        "messageId",
+        "locale",
+        "variable",
+        "selectorType",
+        "label",
+        "selectorSpan",
+        "bodySpan",
+        "localAllowedCount",
+        "constraints",
+        "classification",
+        "witnessCaseId",
+        "emptyVariables"
+      ]
+    },
+    "pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "branchlingo-exercise-pack"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "status": {
+          "const": "complete"
+        },
+        "coverageClaim": {
+          "const": "every-reachable-arm-in-declared-finite-cartesian-domains"
+        },
+        "manifestSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "manifest": {
+          "$ref": "#/$defs/manifest"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          },
+          "minItems": 1,
+          "maxItems": 16
+        },
+        "runtime": {
+          "$ref": "#/$defs/runtime"
+        },
+        "counts": {
+          "$ref": "#/$defs/counts"
+        },
+        "arms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/arm"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/case"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "kind",
+        "schemaVersion",
+        "status",
+        "coverageClaim",
+        "manifestSha256",
+        "manifest",
+        "sources",
+        "runtime",
+        "counts",
+        "arms",
+        "cases"
+      ]
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "catalogId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "messageId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "armId": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "catalogId",
+        "messageId",
+        "armId"
+      ]
+    },
+    "replay": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "branchlingo-replay-report"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "status": {
+          "enum": [
+            "verified",
+            "mismatch",
+            "incomplete",
+            "invalid"
+          ]
+        },
+        "packSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "inputMatch": {
+          "type": "boolean"
+        },
+        "runtimeMatch": {
+          "type": "boolean"
+        },
+        "recomputedCounts": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/counts"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verifiedCaseIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sha256"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        }
+      },
+      "required": [
+        "kind",
+        "schemaVersion",
+        "status",
+        "packSha256",
+        "inputMatch",
+        "runtimeMatch",
+        "recomputedCounts",
+        "verifiedCaseIds",
+        "diagnostics"
+      ]
+    },
+    "failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "branchlingo-diagnostic-report"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "status": {
+          "enum": [
+            "invalid",
+            "incomplete",
+            "mismatch"
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          },
+          "minItems": 1,
+          "maxItems": 1000
+        }
+      },
+      "required": [
+        "kind",
+        "schemaVersion",
+        "status",
+        "diagnostics"
+      ]
+    }
+  }
+}

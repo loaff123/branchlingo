@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+import {buildAnalysis} from '../src/analyze.mjs';
+const manifestBytes=fs.readFileSync(new URL('../examples/manifest.json',import.meta.url));const cat=fs.readFileSync(new URL('../examples/files.json',import.meta.url));const input={manifestBytes,catalogsById:new Map(['en','fr','ja'].map(k=>[k,cat]))};
+test('worked finite masks exact reachability and witness tuple counts',()=>{const a=buildAnalysis(input);assert.equal(a.basePack.counts.arms,21);assert.equal(a.basePack.counts.reachable,16);assert.equal(a.cases.length,10);for(const locale of ['en','fr','ja']){const arms=a.basePack.arms.filter(x=>x.locale===locale);assert.equal(arms.filter(x=>x.classification==='reachable').length,locale==='fr'?6:5);assert.equal(arms.at(-2).classification,'unreachable');}});
+test('per-run resource preflight occurs before huge range expansion',()=>{const m=JSON.parse(manifestBytes);m.contracts[0].variables[1].domain.max=Number.MAX_SAFE_INTEGER;assert.throws(()=>buildAnalysis({...input,manifestBytes:Buffer.from(JSON.stringify(m))}),e=>e.status==='incomplete');});
